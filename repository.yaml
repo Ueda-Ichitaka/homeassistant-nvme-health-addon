@@ -1,4 +1,4 @@
 # Home Assistant add-on repository manifest, so this git repository can be
-# added under Settings > Add-ons > Add-on store > Repositories.
+# added under Settings > Apps > Install app > Repositories.
 name: NVMe Health add-on repository
 maintainer: ueda

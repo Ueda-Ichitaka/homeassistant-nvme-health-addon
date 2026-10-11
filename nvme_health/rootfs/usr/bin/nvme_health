@@ -19,7 +19,7 @@ DISCOVERY_PREFIX="$(bashio::config 'discovery_prefix')"
 ADDON_VERSION="$(bashio::addon.version)"
 
 if ! bashio::services.available "mqtt"; then
-    bashio::exit.nok "No MQTT broker found. Install and start the Mosquitto broker add-on."
+    bashio::exit.nok "No MQTT broker found. Install and start the Mosquitto broker app and set up the MQTT integration."
 fi
 MQTT_HOST="$(bashio::services mqtt 'host')"
 MQTT_PORT="$(bashio::services mqtt 'port')"

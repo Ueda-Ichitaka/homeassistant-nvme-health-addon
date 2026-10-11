@@ -6,7 +6,7 @@ via MQTT discovery. All entities appear under one device, **NVMe SSD**.
 
 ## Requirements
 
-- The **Mosquitto broker** add-on is installed and running.
+- The **Mosquitto broker** app is installed and running.
 - The **MQTT** integration is set up (Home Assistant offers it automatically
   once the broker runs).
 - The drive is `/dev/nvme0` (true for a single NVMe SSD, such as a Raspberry Pi 5

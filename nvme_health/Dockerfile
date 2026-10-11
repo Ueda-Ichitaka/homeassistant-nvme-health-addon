@@ -16,4 +16,5 @@ RUN chmod a+x \
 
 LABEL \
     org.opencontainers.image.title="Home Assistant add-on: NVMe Health" \
-    org.opencontainers.image.description="NVMe SSD SMART/health monitoring via MQTT discovery"
+    org.opencontainers.image.description="NVMe SSD SMART/health monitoring via MQTT discovery" \
+    org.opencontainers.image.licenses="MIT"
