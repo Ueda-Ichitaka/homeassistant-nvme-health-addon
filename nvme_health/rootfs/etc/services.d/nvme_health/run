@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# s6 service: starts the NVMe Health main loop.
+# ==============================================================================
+exec /usr/bin/nvme_health

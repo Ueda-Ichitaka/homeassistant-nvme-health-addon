@@ -1,0 +1,11 @@
+# English labels and help texts for the NVMe Health add-on options.
+configuration:
+  interval:
+    name: Poll interval
+    description: Seconds between two SMART reads. Entities go unavailable after three missed polls.
+  warn_percentage_used:
+    name: Wear warning level
+    description: Wear (percentage used) at which the Problem sensor turns on.
+  discovery_prefix:
+    name: MQTT discovery prefix
+    description: Must match the discovery prefix of the Home Assistant MQTT integration.

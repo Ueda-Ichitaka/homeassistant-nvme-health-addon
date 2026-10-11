@@ -1,0 +1,28 @@
+# Home Assistant add-on manifest of NVMe Health: options, permissions and the
+# hardware the add-on needs to read the NVMe drive's SMART/health log.
+name: NVMe Health
+version: "0.1.0"
+slug: nvme_health
+description: >-
+  NVMe SSD health for Home Assistant: SMART status, wear, terabytes written,
+  temperatures, critical warnings (including read-only mode) via MQTT discovery.
+arch:
+  - aarch64
+  - amd64
+init: false
+startup: application
+boot: auto
+services:
+  - mqtt:need
+devices:
+  - /dev/nvme0
+privileged:
+  - SYS_ADMIN
+options:
+  interval: 300
+  warn_percentage_used: 80
+  discovery_prefix: homeassistant
+schema:
+  interval: int(30,86400)
+  warn_percentage_used: int(1,100)
+  discovery_prefix: str

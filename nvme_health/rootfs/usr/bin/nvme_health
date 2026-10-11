@@ -1,0 +1,41 @@
+#!/usr/bin/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# NVMe Health main loop: reads the add-on options and the MQTT broker from the
+# Supervisor, then polls the NVMe drive every `interval` seconds and publishes
+# the results to Home Assistant (logic lives in /usr/lib/nvme_health/functions.sh).
+# ==============================================================================
+# shellcheck source=SCRIPTDIR/../lib/nvme_health/functions.sh
+source /usr/lib/nvme_health/functions.sh
+
+log_info() { bashio::log.info "$@"; }
+log_error() { bashio::log.error "$@"; }
+mqtt_publish() { mosquitto_publish "$@" || bashio::log.warning "MQTT publish to $1 failed"; }
+
+DEVICE="/dev/nvme0"
+INTERVAL="$(bashio::config 'interval')"
+WARN_PERCENTAGE_USED="$(bashio::config 'warn_percentage_used')"
+DISCOVERY_PREFIX="$(bashio::config 'discovery_prefix')"
+ADDON_VERSION="$(bashio::addon.version)"
+
+if ! bashio::services.available "mqtt"; then
+    bashio::exit.nok "No MQTT broker found. Install and start the Mosquitto broker add-on."
+fi
+MQTT_HOST="$(bashio::services mqtt 'host')"
+MQTT_PORT="$(bashio::services mqtt 'port')"
+MQTT_USER="$(bashio::services mqtt 'username')"
+MQTT_PASSWORD="$(bashio::services mqtt 'password')"
+bashio::log.info "Monitoring ${DEVICE} every ${INTERVAL}s, MQTT broker ${MQTT_HOST}:${MQTT_PORT}"
+
+on_stop() {
+    announce_offline
+    exit 0
+}
+trap on_stop TERM INT
+
+while true; do
+    poll_once || true
+    # Sleep in the background so the TERM trap runs without waiting for it.
+    sleep "${INTERVAL}" &
+    wait $!
+done

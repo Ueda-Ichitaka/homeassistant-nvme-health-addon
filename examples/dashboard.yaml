@@ -1,0 +1,106 @@
+# Example Home Assistant dashboard view for the NVMe Health add-on, using only
+# built-in cards. Paste into a dashboard: Edit dashboard > three dots >
+# Raw configuration editor, and add it to the `views:` list.
+title: NVMe SSD
+path: nvme-ssd
+icon: mdi:harddisk
+type: sections
+sections:
+  - type: grid
+    cards:
+      - type: heading
+        heading: Health
+      - type: tile
+        entity: binary_sensor.nvme_problem
+        name: Overall
+        grid_options:
+          columns: full
+      - type: tile
+        entity: binary_sensor.nvme_media_read_only
+        name: Media read-only
+      - type: tile
+        entity: binary_sensor.nvme_block_device_read_only
+        name: Kernel read-only
+      - type: tile
+        entity: binary_sensor.nvme_data_partition_read_only
+        name: Data partition read-only
+      - type: tile
+        entity: binary_sensor.nvme_smart_failed
+        name: SMART
+      - type: tile
+        entity: binary_sensor.nvme_spare_below_threshold
+        name: Spare
+      - type: tile
+        entity: binary_sensor.nvme_reliability_degraded
+        name: Reliability
+      - type: tile
+        entity: binary_sensor.nvme_temperature_warning
+        name: Temperature
+      - type: tile
+        entity: sensor.nvme_last_self_test_result
+        name: Last self-test
+  - type: grid
+    cards:
+      - type: heading
+        heading: Wear
+      - type: gauge
+        entity: sensor.nvme_percentage_used
+        name: Wear
+        min: 0
+        max: 100
+        severity:
+          green: 0
+          yellow: 60
+          red: 80
+      - type: gauge
+        entity: sensor.nvme_available_spare
+        name: Spare
+        min: 0
+        max: 100
+        severity:
+          red: 0
+          yellow: 20
+          green: 50
+      - type: tile
+        entity: sensor.nvme_data_written_tb
+        name: Written
+      - type: tile
+        entity: sensor.nvme_data_read_tb
+        name: Read
+      - type: statistics-graph
+        title: Terabytes written (total)
+        entities:
+          - sensor.nvme_data_written_tb
+        stat_types:
+          - state
+        chart_type: line
+        period: day
+        days_to_show: 90
+      - type: statistics-graph
+        title: Terabytes written per day
+        entities:
+          - sensor.nvme_data_written_tb
+        stat_types:
+          - change
+        chart_type: bar
+        period: day
+        days_to_show: 30
+  - type: grid
+    cards:
+      - type: heading
+        heading: Temperature and counters
+      - type: history-graph
+        title: Temperature
+        hours_to_show: 48
+        entities:
+          - sensor.nvme_temperature
+      - type: entities
+        entities:
+          - sensor.nvme_power_on_hours
+          - sensor.nvme_power_cycles
+          - sensor.nvme_unsafe_shutdowns
+          - sensor.nvme_media_errors
+          - sensor.nvme_num_err_log_entries
+          - sensor.nvme_warning_temp_time
+          - sensor.nvme_critical_comp_time
+          - sensor.nvme_available_spare_threshold
